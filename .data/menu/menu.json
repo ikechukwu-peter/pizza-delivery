@@ -1,0 +1,59 @@
+{"menu": {
+    "items": [
+        {
+            "name":"coke",
+            "qty": 20,
+            "category":"drinks",
+            "sizes":["small","large"],
+            "price" : "200",
+            "productCode": "1"
+
+        },
+        {
+            "name":"pepsi",
+            "qty": 20,
+            "category":"drinks",
+            "sizes":["small","large"],
+            "price" : "150",
+            "productCode": "2"
+
+        },
+        {
+            "name":"water",
+            "qty": 20,
+            "category":"drinks",
+            "sizes":["small","large"],
+            "price" : "100",
+            "productCode": "3"
+
+            
+        },
+        {
+            "name":"hamburger",
+            "qty": 40,
+            "category":"junk food",
+            "sizes":["small","large"],
+            "price" : "570",
+            "productCode": "4"
+
+        },
+        {
+            "name":"fries",
+            "qty": 20,
+            "category":"junk food",
+            "sizes":["small","large"],
+            "price" : "590",
+            "productCode": "5"
+
+        },
+        {
+            "name":"pizza",
+            "qty": 20,
+            "category":"junk food",
+            "sizes":["small","large"],
+            "price" : "1500",
+            "productCode": "6"
+
+        }
+    ]
+}}
