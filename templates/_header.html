@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <!-- General Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="content-language" content="en-us" />
+    <base href="{global.baseUrl}" />
+    <script src="{head.script}"></script>
+    <!-- Meta Tags -->
+    <title>{head.title} | {global.appName}</title>
+    <meta name="description" content="{head.description}" />
+
+    <!-- Static Assets -->
+    <link type="image/x-icon" rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="public/app.css" />
+  </head>
+  <body class="{body.class}">
+    <!-- Page Wrapper -->
+    <div class="wrapper">
+      <!-- Header -->
+      <div class="header">
+        <!-- Logo -->
+        <a class="logo" href="/">
+          <img src="public/logo.png" alt="Logo" />
+        </a>
+        <!-- Navigation -->
+        <ul class="menu">
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li class="loggedOut">
+            <a href="/register">Signup</a>
+          </li>
+          <li class="loggedOut">
+            <a href="/login">Login</a>
+          </li>
+          <li class="loggedIn">
+            <a href="/shopping">Buy Pizza</a>
+          </li>
+
+          <li class="loggedIn logger">
+            <a href="#">Logout</a>
+          </li>
+        </ul>
+
+        <div class="clear"></div>
+      </div>
+
+      <!-- Page-Specific Content -->
+      <div class="content"></div>
+    </div>
+  </body>
+</html>

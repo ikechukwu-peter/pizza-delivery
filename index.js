@@ -59,10 +59,14 @@ const unifiedServer = function (req, res) {
     buffer += decoder.end();
 
     // Check the router for a matching path for a handler. If one is not found, use the notFound handler instead.
-    const chosenHandler =
+    let chosenHandler =
       typeof router[trimmedPath] !== "undefined"
         ? router[trimmedPath]
         : handlers.notFound;
+
+    // If the request is within the public directory use to the public handler instead
+    chosenHandler =
+      trimmedPath.indexOf("public/") > -1 ? handlers.public : chosenHandler;
 
     // Construct the data object to send to the handler
     const data = {
@@ -73,31 +77,89 @@ const unifiedServer = function (req, res) {
       payload: helpers.parseJsonToObject(buffer),
     };
     // Route the request to the handler specified in the router
-    chosenHandler(data, function (statusCode, payload) {
+    chosenHandler(data, function (statusCode, payload, contentType) {
+      // Determine the type of response (fallback to JSON)
+      contentType = typeof contentType == "string" ? contentType : "json";
+
       // Use the status code returned from the handler, or set the default status code to 200
       statusCode = typeof statusCode == "number" ? statusCode : 200;
 
-      // Use the payload returned from the handler, or set the default payload to an empty object
-      payload = typeof payload == "object" ? payload : {};
+      // Return the response parts that are content-type specific
+      let payloadString = "";
+      if (contentType == "json") {
+        res.setHeader("Content-Type", "application/json");
+        payload = typeof payload == "object" ? payload : {};
+        payloadString = JSON.stringify(payload);
+      }
 
-      // Convert the payload to a string
-      const payloadString = JSON.stringify(payload);
+      if (contentType == "html") {
+        res.setHeader("Content-Type", "text/html");
+        payloadString = typeof payload == "string" ? payload : "fuck node";
+      }
 
-      // Return the response
-      res.setHeader("Content-Type", "application/json");
+      if (contentType == "favicon") {
+        res.setHeader("Content-Type", "image/x-icon");
+        payloadString = typeof payload !== "undefined" ? payload : "";
+      }
+
+      if (contentType == "plain") {
+        res.setHeader("Content-Type", "text/plain");
+        payloadString = typeof payload !== "undefined" ? payload : "";
+      }
+
+      if (contentType == "css") {
+        res.setHeader("Content-Type", "text/css");
+        payloadString = typeof payload !== "undefined" ? payload : "";
+      }
+
+      if (contentType == "png") {
+        res.setHeader("Content-Type", "image/png");
+        payloadString = typeof payload !== "undefined" ? payload : "";
+      }
+
+      if (contentType == "jpg") {
+        res.setHeader("Content-Type", "image/jpeg");
+        payloadString = typeof payload !== "undefined" ? payload : "";
+      }
+      // Return the response-parts common to all content-types
       res.writeHead(statusCode);
       res.end(payloadString);
-      console.log(trimmedPath, statusCode);
+
+      // If the response is 200, print green, otherwise print red
+      if (statusCode === 200) {
+        console.log(
+          "\x1b[32m%s\x1b[0m",
+          statusCode,
+          trimmedPath,
+          method.toUpperCase()
+        );
+      } else {
+        console.log(
+          "\x1b[31m%s\x1b[0m",
+          statusCode,
+          trimmedPath,
+          method.toUpperCase()
+        );
+      }
     });
   });
 };
 
 //Routers
 const router = {
+  "": handlers.index,
+  register: handlers.register,
+  login: handlers.login,
+  shopping: handlers.shoppingList,
+  "account/view/all": handlers.viewAll,
+  "account/fillCart": handlers.fillCart,
+  "account/order": handlers.placeOrder,
   ping: handlers.ping,
-  users: handlers.users,
-  tokens: handlers.tokens,
-  menu: handlers.menu,
-  cartitems: handlers.cartitems,
-  orders: handlers.orders,
+  "api/users": handlers.users,
+  "api/tokens": handlers.tokens,
+  "api/menu": handlers.menu,
+  "api/cartitems": handlers.cartitems,
+  "api/orders": handlers.orders,
+  public: handlers.public,
+  favicon: handlers.favicon,
 };
